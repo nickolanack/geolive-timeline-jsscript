@@ -1,6 +1,6 @@
 <script type="text/javascript">
 /**
- *
+ * Copy the following into Timeline onRender script input (do not include the <script> tags...)
  */
 
 var erraSpan=container.appendChild(new Element('span', {'class':'era-s'}));

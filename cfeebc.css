@@ -1,0 +1,53 @@
+@CHARSET "UTF-8";
+
+.events-bar {
+	position: absolute;
+	bottom: 50px;
+	width: 100%;
+}
+
+.events-bar>div {
+	position: absolute;
+	height: 50px;
+	bottom: 0;
+	border-left: 1px solid;
+}
+
+.events-bar>div:before {
+	content: "";
+	position: absolute;
+	border-radius: 100%;
+	width: 5px;
+	height: 5px;
+	background-color: white;
+	border: 1px solid black;
+	left: -4px;
+}
+
+.events-bar>div.b {
+	height: 80px;
+}
+
+.events-bar>div.c {
+	height: 65px;
+}
+
+.events-bar>div:after {
+	content: attr(data-label);
+	text-align: right;
+	position: absolute;
+	white-space: nowrap;
+	top: -3px;
+	background-color: white;
+	padding: 0 1px;
+	border-radius: 2px;
+}
+
+.events-bar>div.a:after {
+	right: 6px;
+}
+
+.events-bar>div.b:after, .events-bar>div.c:after, .events-bar>div.d:after
+	{
+	left: 5px;
+}
