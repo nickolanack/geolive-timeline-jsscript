@@ -60,14 +60,17 @@ filterManager.search(
                 label:'event',
                 onclick:function(){
                     GeoliveSearch.SearchAndOpenMapItem(application, match.id, match.lid);
-                    }
+
                 },
                 popover:function(p){
-
+                    var marker=application.layerManager.filterMarkerById(match.id);
+                    if(marker){
+                        p.setText(marker.getTitle());
+                    }
                 	//going to search for items name, and then updated the display text.
 
                 }
-            );
+            });
         });
 
         //event class: a, b, c, and d are used to alter the height and label directions
@@ -88,17 +91,18 @@ filterManager.search(
                 })).addEvent('click',event.onclick);
 
 
-            event.popover(new UIPopover(pin, {anchor:UIPopover.AnchorTo(['top']),
+            event.popover(new UIPopover(pin, {
+                anchor:UIPopover.AnchorTo(['top']),
                 title:'',
                 description:event.label//,
                 //hideDelay:500,
                 //margin:50
-                })
-            );
+            }));
 
         });
 
     }
+
 );
 
 
