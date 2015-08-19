@@ -88,6 +88,10 @@ filterManager.search(
         events.sort(function(a, b){
     	   return a.percent-b.percent;
         });
+
+
+
+
         events.push({
             start:'today',
             percent:todayPercent,
@@ -99,13 +103,17 @@ filterManager.search(
 
         Array.each(events, function(event){
 
-            var pin =eventsBar.appendChild(new Element('div', {
+        	var pinOpts={
                     'class':'e-'+event.start+' '+(event['class']||'a'),
-                    'data-label':event.start,
                     styles:{
                         left:event.percent+'%',
                     }
-                }));
+                };
+
+            if(event.start!==false){
+                pinOpts['data-label']=event.start;
+            }
+            var pin =eventsBar.appendChild(new Element('div', pinOpts));
             if(event.onclick){
                 pin.addEvent('click', event.onclick);
             }
@@ -120,6 +128,13 @@ filterManager.search(
             }
             event.pin=pin;
         });
+
+        for(var i=1;i<events.length-1;i++){
+
+    	    if(events[i].start===events[i-1].start){
+      	      events[i].pin.addClass('dplct');
+            }
+        }
 
        //skip first and last
 
@@ -136,6 +151,8 @@ filterManager.search(
            for(var i=1;i<events.length-1;i++){
 
         	    if(events[i].percent-events[i-1].percent<10){
+
+
         	      var classes=['a', 'b', 'c', 'd'];
       	    	  for(var j=0;j<classes.length;j++){
       	    	     if(events[i-1].pin.hasClass(classes[j])){

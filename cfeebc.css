@@ -1,53 +1,84 @@
 @CHARSET "UTF-8";
 
-.events-bar {
-	position: absolute;
-	bottom: 50px;
-	width: 100%;
+.events-bar{
+  position: absolute;
+  bottom: 50px;
+  width: 100%;
 }
 
+
 .events-bar>div {
-	position: absolute;
-	height: 50px;
-	bottom: 0;
-	border-left: 1px solid;
+  position: absolute;
+  height: 50px;
+  bottom: 0;
+  border-left: 1px solid;
 }
 
 .events-bar>div:before {
-	content: "";
-	position: absolute;
-	border-radius: 100%;
-	width: 5px;
-	height: 5px;
-	background-color: white;
-	border: 1px solid black;
-	left: -4px;
+    content: "";
+    position: absolute;
+    border-radius: 100%;
+    width: 5px;
+    height: 5px;
+    background-color: white;
+    border: 1px solid black;
+    left: -4px;
 }
+
+
 
 .events-bar>div.b {
-	height: 80px;
+    height: 80px;
 }
+
 
 .events-bar>div.c {
-	height: 65px;
+    height: 65px;
 }
+
 
 .events-bar>div:after {
-	content: attr(data-label);
-	text-align: right;
-	position: absolute;
-	white-space: nowrap;
-	top: -3px;
-	background-color: white;
-	padding: 0 1px;
-	border-radius: 2px;
+  content: attr(data-label);
+    text-align: right;
+    position: absolute;
+    white-space: nowrap;
+    top: -4px;
+    background-color: white;
+    padding: 1px 4px;
+    border-radius: 2px;
+    box-shadow: 0 0 2px rgba( 0, 0, 0, 0.3);
 }
 
-.events-bar>div.a:after {
-	right: 6px;
+.events-bar>div.a:after{
+  right: 6px;
+}
+.events-bar>div.b:after, .events-bar>div.c:after, .events-bar>div.d:after {
+  left: 5px;
 }
 
-.events-bar>div.b:after, .events-bar>div.c:after, .events-bar>div.d:after
-	{
-	left: 5px;
+.e-today.today {
+    bottom: -20px;
+    height: 20px;
+}
+
+.e-today.today:after {
+    top: 17px;
+    right: 6px;
+}
+
+.e-today.today:before {
+    top: 20px;
+    background-color: rgb(190, 121, 36);
+}
+
+.events-bar>div.past:before {
+    background-color: black;
+}
+
+.events-bar>div.past {
+    opacity: 0.3;
+}
+
+.events-bar>div.dplct:after {
+    display: none;
 }
