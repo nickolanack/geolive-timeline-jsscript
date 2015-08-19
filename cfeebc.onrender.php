@@ -63,22 +63,39 @@ filterManager.search(
 
                 },
                 popover:function(p){
-                    var marker=application.layerManager.filterMarkerById(match.id);
-                    if(marker){
-                        p.setText(marker.getTitle());
-                    }
+                    setTimeout(function(){
+                        var marker=application.layerManager.filterMarkerById(match.id);
+                        if(marker){
+                            p.setText(marker.getTitle());
+                        }
+                    }, 2000);
                 	//going to search for items name, and then updated the display text.
 
                 }
             });
         });
 
-        //event class: a, b, c, and d are used to alter the height and label directions
-        for(var i=1;i<events.lengt;i++){
-            // process events to ensure height distibution (by adding class name)
-            // in case items are very close horizontally.
-        }
 
+        var todayTime=(new Date()).getTime();
+        var todayOffset=todayTime-range[0];
+        var todayPercent=dateToPercent(todayOffset);
+
+
+
+
+        //event class: a, b, c, and d are used to alter the height and label directions using css
+
+        events.sort(function(a, b){
+    	   return a.percent-b.percent;
+        });
+        events.push({
+            start:'today',
+            percent:todayPercent,
+            label:'today',
+            onclick:false,
+            popover:false,
+            'class':'today'
+        });
 
         Array.each(events, function(event){
 
@@ -88,18 +105,51 @@ filterManager.search(
                     styles:{
                         left:event.percent+'%',
                     }
-                })).addEvent('click',event.onclick);
-
-
-            event.popover(new UIPopover(pin, {
-                anchor:UIPopover.AnchorTo(['top']),
-                title:'',
-                description:event.label//,
-                //hideDelay:500,
-                //margin:50
-            }));
-
+                }));
+            if(event.onclick){
+                pin.addEvent('click', event.onclick);
+            }
+            if(event.popover){
+                event.popover(new UIPopover(pin, {
+                    anchor:UIPopover.AnchorTo(['top']),
+                    title:'',
+                    description:event.label//,
+                    //hideDelay:500,
+                    //margin:50
+                }));
+            }
+            event.pin=pin;
         });
+
+       //skip first and last
+
+        for(var i=0;i<events.length-1;i++){
+
+    	    if(events[i].percent<events[events.length-1].percent){
+
+      	      events[i].pin.addClass('past');
+
+            }
+       }
+
+       var stagger=function(){
+           for(var i=1;i<events.length-1;i++){
+
+        	    if(events[i].percent-events[i-1].percent<10){
+        	      var classes=['a', 'b', 'c', 'd'];
+      	    	  for(var j=0;j<classes.length;j++){
+      	    	     if(events[i-1].pin.hasClass(classes[j])){
+      	    	    	events[i].pin.addClass(classes[(j%(classes.length-1))+1]); //adds: b, c, d, b, c, d ...
+      	    	    	events[i].pin.removeClass('a');
+      	    	    	break;
+          	    	 }
+                  }
+
+                }
+           }
+
+       };
+       stagger();
 
     }
 
