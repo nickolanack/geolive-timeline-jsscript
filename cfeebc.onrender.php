@@ -3,6 +3,7 @@
  * Copy the following into Timeline onRender script input (do not include the <script> tags...)
  */
 
+
 var dateToPercent=function(time){
     return Math.round((time/span)*100.0);
 }
@@ -13,10 +14,10 @@ var eventsBar=container.appendChild(new Element('div', {'class':'events-bar'}));
 
 
 
-var min=(new Date(range[0])).toISOString().split('T')[0].substring(0,7)+"-01";
-var max=(new Date(span+range[0])).toISOString().split('T')[0].substring(0,7)+"-01";
+var min=(new Date(range[0])).toISOString().split('T')[0].substring(0,10);
+var max=(new Date(span+range[0])).toISOString().split('T')[0].substring(0,10);
 
-filterManager.search(
+filterManager.query(
 	AttributeFilter.InsersectFilter('markerAttributes',
 		[
             {
