@@ -91,29 +91,49 @@ Behavior('graph');
     var data=resp.values;
 
 
-new UIGraph(graphBar, data, {
-                                lineTemplate:UIGraph.UnitStepTemplate,
-                                //lineTemplate:UIGraph.LineTemplate,
+    new UIGraph(graphBar, data, {
+                lineTemplate:UIGraph.UnitStepBarsTemplate,
+                //lineTemplate:UIGraph.LineTemplate,
 				title:"",
 				height:26,
 				width:900,
-                                widthUnit:'%',
+                widthUnit:'%',
 				padding:0,
 				lineColor: '#CCCCCC',
-                                fillColor:'rgba(233,233,233,0.2)'
+				fillGradient:true
 			});
 
-new UIGraph(graphBarDetail, data, {
-                                lineTemplate:UIGraph.UnitStepTemplate,
-                                //lineTemplate:UIGraph.LineTemplate,
-				title:"Distribution of outlet close dates",
-				height:71,
+    new UIGraph(graphBarDetail, data, {
+                lineTemplate:UIGraph.UnitStepBarsTemplate,
+                //lineTemplate:UIGraph.LineTemplate,
+				title:"Number of outlet transitions from 2008",
+				height:77,
 				width:900,
-                                widthUnit:'%',
+                widthUnit:'%',
 				padding:0,
 				lineColor: 'black',
-                                fillColor:'rgb(179, 209, 255)'
-			});
+                fillGradient:true,
+
+			}).titleEl.appendChild((function(){
+
+
+				var span=new Element('span', {'class':'timeline-opts'});
+
+			    var options=['to online','new','closed','decrease','closed; merger','new; merger','increase','to community news'];
+			    Array.each(options,function(opt){
+
+			    	(new Element('input',{type:'checkbox', checked:true})).inject(span.appendChild(new Element('label', {'html':opt})), 'top');
+
+
+
+
+				});
+
+			    return span;
+
+
+
+			})());
 
 }).execute();
 

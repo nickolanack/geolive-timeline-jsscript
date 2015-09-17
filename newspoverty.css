@@ -16,19 +16,18 @@
 .era-bar>div {
 	position: absolute;
 	height: 100%;
-	background-color: white;
-	border-left: 1px solid rgba(0, 0, 0, 0.5);
+
 }
 
 .era-bar>.era {
-	border: 1px solid rgba(0, 0, 0, 0.5);
 	cursor: pointer;
 	background-color: transparent;
 	border-left: none;
 }
 
-.era-bar>.era:hover {
+.era-bar>.era:hover, .era-bar>.era.hover {
 	background-color: rgba(245, 245, 220, 0.3);
+	border-radius:10px 10px 0 0;
 }
 
 .era-bar>.era:before {
@@ -100,7 +99,7 @@
 
 .timeline-graph {
 	position: absolute;
-	bottom: 50px;
+	bottom: 45px;
 	z-index: 1;
 	padding: 2px 0;
 	pointer-events: none;
@@ -112,18 +111,38 @@
 	opacity: 0;
 }
 
-.era-s:hover .era-bar {
+.era-s:hover .era-bar, .era-s.hover .era-bar  {
 	height: 100px;
 }
 
-.era-s:hover .timeline-graph {
+.era-s:hover .timeline-graph, .era-s.hover .timeline-graph {
 	opacity: 0
 }
 
-.era-s:hover .timeline-graph.detail {
+.era-s:hover .timeline-graph.detail, .era-s.hover .timeline-graph.detail {
 	opacity: 1
 }
 
 .timeline-graph.detail .Graph_Title {
-	text-indent: 10px;
+	    display: inline-block;
+    background-color: rgba(255,255,255,0.9);
+    padding: 3px 10px;
+}
+
+
+.timeline-opts label {
+    display: inline-block;
+    margin: 0;
+    font-size: 10px;
+    color: cadetblue;
+}
+
+.timeline-opts label>input {
+    vertical-align: baseline;
+    margin: 0 3px 0 10px;
+}
+
+.timeline-opts {
+    z-index: 1;
+    pointer-events: all;
 }
