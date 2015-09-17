@@ -11,7 +11,7 @@ var bar=erraSpan.appendChild(new Element('div', {'class':'era-bar'}));
 var graphBarDetail=erraSpan.appendChild(new Element('div',{'class':'timeline-graph detail'}))
 
 var eras=[
-{start:'2006', end:'2015', label:''}
+{start:'2008', end:'2015', label:''}
 ];
 var dateToPercent=function(time){
    return Math.round((time/span)*100.0);
