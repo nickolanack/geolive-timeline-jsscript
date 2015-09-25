@@ -3,139 +3,233 @@
  * Copy the following into Timeline onRender script input (do not include the <script> tags...)
  */
 
+ var erraSpan=container.appendChild(new Element('span', {'class':'era-s'}));
+ var barBack=erraSpan.appendChild(new Element('div', {'class':'era-bar bk'}));
+ var graphBar=erraSpan.appendChild(new Element('div',{'class':'timeline-graph'}))
+ var bar=erraSpan.appendChild(new Element('div', {'class':'era-bar'}));
+ var graphBarDetail=erraSpan.appendChild(new Element('div',{'class':'timeline-graph detail'}))
 
-var erraSpan=container.appendChild(new Element('span', {'class':'era-s'}));
-var barBack=erraSpan.appendChild(new Element('div', {'class':'era-bar bk'}));
-var graphBar=erraSpan.appendChild(new Element('div',{'class':'timeline-graph'}))
-var bar=erraSpan.appendChild(new Element('div', {'class':'era-bar'}));
-var graphBarDetail=erraSpan.appendChild(new Element('div',{'class':'timeline-graph detail'}))
+ var eras=[
+ {start:'2008', end:'2015', label:''}
+ ];
+ var dateToPercent=function(time){
+    return Math.round((time/span)*100.0);
+ }
+ Array.each(eras, function(era){
 
-var eras=[
-{start:'2008', end:'2015', label:''}
-];
-var dateToPercent=function(time){
-   return Math.round((time/span)*100.0);
-}
-Array.each(eras, function(era){
+     var eraRange=[(new Date(era.start)).getTime(),(new Date(era.end)).getTime()];
 
-    var eraRange=[(new Date(era.start)).getTime(),(new Date(era.end)).getTime()];
+     var s=eraRange[0]-range[0];
+     var e=eraRange[1]-eraRange[0];
+     var r=[dateToPercent(s), dateToPercent(e)]
+     bar.appendChild(new Element('div', {
+          'class':'era e-'+era.start,
+          'data-label':era.label,
+          styles:{
+             left:r[0]+'%',
+             width:r[1]+'%'
+         }
+     })).addEvent('click',function(){
+         timeline.setValue([r[0], r[0]+r[1]]);
+     });
+ });
 
-    var s=eraRange[0]-range[0];
-    var e=eraRange[1]-eraRange[0];
-    var r=[dateToPercent(s), dateToPercent(e)]
-    bar.appendChild(new Element('div', {
-         'class':'era e-'+era.start,
-         'data-label':era.label,
-         styles:{
-            left:r[0]+'%',
-            width:r[1]+'%'
-        }
-    })).addEvent('click',function(){
-        timeline.setValue([r[0], r[0]+r[1]]);
-    });
-});
-
-var eraRange=[(new Date(eras[0].start)).getTime(),(new Date(eras[eras.length-1].end)).getTime()];
-var s=eraRange[0]-range[0];
-var e=eraRange[1]-eraRange[0];
-var r=[dateToPercent(s), dateToPercent(e)]
-barBack.appendChild(new Element('div', {
-         styles:{
-            left:r[0]+'%',
-            width:r[1]+'%'
-        }
-}));
-
-
-var eventsBar=container.appendChild(new Element('div', {'class':'events-bar'}));
+ var eraRange=[(new Date(eras[0].start)).getTime(),(new Date(eras[eras.length-1].end)).getTime()];
+ var s=eraRange[0]-range[0];
+ var e=eraRange[1]-eraRange[0];
+ var r=[dateToPercent(s), dateToPercent(e)];
+ barBack.appendChild(new Element('div', {
+          styles:{
+             left:r[0]+'%',
+             width:r[1]+'%'
+         }
+ }));
 
 
-//event class: a, b, c, and d are used to alter the height and label directions
-
-var events=[
-//{start:'1804', label:'under Austrian control'},
-
-];
-
-Array.each(events, function(event){
-
-    var startTime=(new Date(event.start)).getTime();
-
-    var startOffset=startTime-range[0];
-    var startPercent=dateToPercent(startOffset);
-    var pin =eventsBar.appendChild(new Element('div', {
-         'class':'e-'+event.start+' '+(event.class||'a'),
-         'data-label':event.start,
-         styles:{
-            left:startPercent+'%',
-        }
-    })).addEvent('click',function(){
-
-    });
-
-    new UIPopover(pin, {anchor:UIPopover.AnchorTo(['top']),
-				title:'',
-				description:event.label//,
-				//hideDelay:500,
-				//margin:50
-			});
-
-});
+ var eventsBar=container.appendChild(new Element('div', {'class':'events-bar'}));
 
 
-//bar graph
-<?php
+ //event class: a, b, c, and d are used to alter the height and label directions
+
+ var events=[
+ //{start:'1804', label:'under Austrian control'},
+
+ ];
+
+ Array.each(events, function(event){
+
+     var startTime=(new Date(event.start)).getTime();
+
+     var startOffset=startTime-range[0];
+     var startPercent=dateToPercent(startOffset);
+     var pin =eventsBar.appendChild(new Element('div', {
+          'class':'e-'+event.start+' '+(event.class||'a'),
+          'data-label':event.start,
+          styles:{
+             left:startPercent+'%',
+         }
+     })).addEvent('click',function(){
+
+     });
+
+     new UIPopover(pin, {anchor:UIPopover.AnchorTo(['top']),
+ 				title:'',
+ 				description:event.label//,
+ 				//hideDelay:500,
+ 				//margin:50
+ 			});
+
+ });
+
+
+ //bar graph
+ <?php
 Behavior('graph');
 ?>
-(new TimelineQuery('get_timeline_graph', {})).addEvent('success',function(resp){
-    var data=resp.values;
 
 
-    new UIGraph(graphBar, data, {
+
+ (new TimelineQuery('get_timeline_graph', {})).addEvent('success',function(resp){
+     var data=resp.values;
+
+
+     var hintBar=new UIGraph(graphBar, data, {
                 lineTemplate:UIGraph.UnitStepBarsTemplate,
-                //lineTemplate:UIGraph.LineTemplate,
-				title:"",
-				height:26,
-				width:900,
-                widthUnit:'%',
-				padding:0,
-				lineColor: '#CCCCCC',
-				fillGradient:true
-			});
+                 //lineTemplate:UIGraph.LineTemplate,
+ 				title:"",
+ 				height:26,
+ 				width:900,
+                 widthUnit:'%',
+ 				padding:0,
+ 				lineColor: '#CCCCCC',
+ 				fillGradient:true
+ 			});
 
-    new UIGraph(graphBarDetail, data, {
+     var detailBar=new UIGraph(graphBarDetail, data, {
                 lineTemplate:UIGraph.UnitStepBarsTemplate,
-                //lineTemplate:UIGraph.LineTemplate,
-				title:"Number of outlet transitions from 2008",
-				height:77,
-				width:900,
+                 //lineTemplate:UIGraph.LineTemplate,
+ 				title:"Number of outlet transitions from 2008",
+ 				height:77,
+ 				width:900,
                 widthUnit:'%',
-				padding:0,
-				lineColor: 'black',
+ 				padding:0,
+ 				lineColor: 'black',
                 fillGradient:true,
 
-			}).titleEl.appendChild((function(){
+ 			});
+     detailBar.titleEl.appendChild((function(){
 
 
-				var span=new Element('span', {'class':'timeline-opts'});
+ 				var span=new Element('span', {'class':'timeline-opts'});
 
-			    var options=['to online','new','closed','decrease','closed; merger','new; merger','increase','to community news'];
-			    Array.each(options,function(opt){
-
-			    	(new Element('input',{type:'checkbox', checked:true})).inject(span.appendChild(new Element('label', {'html':opt})), 'top');
+ 			    var options=['to online','new','closed','decrease','closed; merger','new; merger','increase','to community news'];
+ 			    var checkboxes=[];
 
 
+ 			    var allBoxesAreChecked=function(){
+ 			       for(var i=0;i<checkboxes.length;i++){
+ 			    	    if(!checkboxes[i].checked){
+ 	 			    	    return false;
+ 			    	    }
+ 	 			   }
+ 	 			   return true;
+ 	 			};
+ 	 			var someBoxedAreChecked=function(){
+     	 			 for(var i=0;i<checkboxes.length;i++){
+     			    	    if(checkboxes[i].checked){
+     	 			    	    return true;
+     			    	    }
+     	 			}
+     	 			return false;
+
+ 	 	 		};
+ 	 			var allCheckedOptions=function(){
+ 	 			    var options=[];
+ 	 				for(var i=0;i<checkboxes.length;i++){
+ 			    	    if(checkboxes[i].checked){
+ 	 			    	    options.push(checkboxes[i].getAttribute('data-filter'));
+ 	 			    	    }
+ 	 			   }
+ 	 			   return options;
+
+ 	 		    };
 
 
-				});
+ 	 		    var cacheData={};
 
-			    return span;
-
-
-
-			})());
-
-}).execute();
+ 	 		    var makeCacheKey=function(){
+ 	 		    	var key= allCheckedOptions().join('-').replace(/[;\s]/g,'');
+ 	 		    	console.log(key);
+ 	 		    	return key;
+ 	 	 		}
 
 
+ 			    Array.each(options,function(opt){
+
+ 			      var checkbox=new Element('input',{type:'checkbox', checked:true, 'data-filter':opt});
+ 			      var label=new Element('label', {'html':opt});
+ 			      span.appendChild(label);
+ 			      label.appendChild(checkbox);
+ 			      checkboxes.push(checkbox);
+ 			      checkbox.addEvent('click', function(){
+
+
+ 			    	    var cacheKey=makeCacheKey();
+ 			    	    if(allBoxesAreChecked()){
+
+ 			    	    	detailBar.setData(data);
+ 	 			    		hintBar.setData(data);
+
+ 	 			        }else if((typeof cacheData[cacheKey])!='undefined'){
+
+ 	 			        	    console.log('used cached data');
+ 	 			    	    	detailBar.setData(cacheData[cacheKey]);
+ 	 	 			    		hintBar.setData(cacheData[cacheKey]);
+
+ 	 	 			    }else {
+
+ 			    	       if(someBoxedAreChecked()){
+
+         			    	(new TimelineQuery('get_timeline_graph', {
+
+         			    		filter:AttributeFilter.JoinFilter('newsAttributes', allCheckedOptions().map(function(opt){
+
+	            							    	return {
+	            							        	field:'transitionType',
+	            							            comparator:'equalTo',
+	            							            value:opt,
+	            							        }
+
+		            							}))
+
+         	 			    	})).addEvent('success',function(resp){
+
+
+             	 			    	cacheData[cacheKey]=resp.values;
+
+         	 			    		detailBar.setData(resp.values);
+         	 			    		hintBar.setData(resp.values);
+
+         	 			    }).execute();
+ 			    	       }else{
+
+ 			    	    	    //do nothing!
+ 			    	    	  detailBar.setData([]);
+ 			    	    	  hintBar.setData([]);
+
+ 	 			    	   }
+
+ 			    	   }
+
+ 	 			  });
+
+ 				});
+
+ 			    return span;
+
+
+
+ 			})());
+
+ }).execute();
 </script>
