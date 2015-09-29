@@ -29,9 +29,7 @@
              left:r[0]+'%',
              width:r[1]+'%'
          }
-     })).addEvent('click',function(){
-         timeline.setValue([r[0], r[0]+r[1]]);
-     });
+     }));
  });
 
  var eraRange=[(new Date(eras[0].start)).getTime(),(new Date(eras[eras.length-1].end)).getTime()];
@@ -98,8 +96,8 @@ Behavior('graph');
                  //lineTemplate:UIGraph.LineTemplate,
  				title:"",
  				height:26,
- 				width:900,
-                 widthUnit:'%',
+ 				width:100,
+                widthUnit:'%',
  				padding:0,
  				lineColor: '#CCCCCC',
  				fillGradient:true
@@ -110,21 +108,55 @@ Behavior('graph');
                  //lineTemplate:UIGraph.LineTemplate,
  				title:"Number of outlet transitions from 2008",
  				height:77,
- 				width:900,
+ 				width:100,
                 widthUnit:'%',
  				padding:0,
  				lineColor: 'black',
                 fillGradient:true,
+                highlightTemplate:UIGraph.UnitStepBarsHighlighter
 
  			});
+     detailBar.addEvent('click',function(data){
+
+    	 console.log(data);
+    	 timeline.setValue([data.x, data.x+1]);
+     });
+
+     //adding a custom popover that follows the cursor.
+     var popover=null;
+     detailBar.addEvent('mouseover',function(d){
+
+    	   if(d.y>0){
+        	   if(!popover){
+        		    popover=new UIPopover(detailBar.canvas);
+        		    popover.show();
+               }
+
+        	   popover.setText(d.y+" outlet"+(d.y==1?"":"s"));
+    	   }else{
+    		   if(popover){
+    			    popover.hide();
+    			    popover.detach();
+    			    popover=null;
+
+        	   }
+
+           }
+
+     });
+
+
+
+
+     /*
+      * add title and checkboxes to filter the graph
+      */
      detailBar.titleEl.appendChild((function(){
 
 
  				var span=new Element('span', {'class':'timeline-opts'});
 
- 			    var options=['to online','new','closed','decrease','closed; merger','new; merger','increase','to community news'];
  			    var checkboxes=[];
-
 
  			    var allBoxesAreChecked=function(){
  			       for(var i=0;i<checkboxes.length;i++){
@@ -154,20 +186,29 @@ Behavior('graph');
 
  	 		    };
 
-
  	 		    var cacheData={};
 
  	 		    var makeCacheKey=function(){
  	 		    	var key= allCheckedOptions().join('-').replace(/[;\s]/g,'');
  	 		    	console.log(key);
  	 		    	return key;
- 	 	 		}
+ 	 	 		};
+
+ 	 		  (new AjaxControlQuery(CoreAjaxUrlRoot,'distinct_attribute_value_list', {
+				    plugin:'Attributes',
+				    table:'newsAttributes',
+				    field:'transitionType'
+	 			})).addEvent('success',function(resp){
+
+	 					console.log(resp);
+	 				    var options=resp.values;
+
 
 
  			    Array.each(options,function(opt){
 
  			      var checkbox=new Element('input',{type:'checkbox', checked:true, 'data-filter':opt});
- 			      var label=new Element('label', {'html':opt});
+ 			      var label=new Element('label', {'html':'<span>'+opt+'</span>', title:opt});
  			      span.appendChild(label);
  			      label.appendChild(checkbox);
  			      checkboxes.push(checkbox);
@@ -204,16 +245,15 @@ Behavior('graph');
 
          	 			    	})).addEvent('success',function(resp){
 
-
              	 			    	cacheData[cacheKey]=resp.values;
-
          	 			    		detailBar.setData(resp.values);
          	 			    		hintBar.setData(resp.values);
 
          	 			    }).execute();
+
  			    	       }else{
 
- 			    	    	    //do nothing!
+ 			    	    	  //do nothing!
  			    	    	  detailBar.setData([]);
  			    	    	  hintBar.setData([]);
 
@@ -225,11 +265,15 @@ Behavior('graph');
 
  				});
 
- 			    return span;
+ 		}).execute();
+
+ 		return span;
+
+ 	})());
 
 
 
- 			})());
+
 
  }).execute();
 </script>
