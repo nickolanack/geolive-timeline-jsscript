@@ -2,7 +2,6 @@
 /**
  * Copy the following into Timeline onRender script input (do not include the <script> tags...)
  */
-
  var erraSpan=container.appendChild(new Element('span', {'class':'era-s'}));
  var barBack=erraSpan.appendChild(new Element('div', {'class':'era-bar bk'}));
  var graphBar=erraSpan.appendChild(new Element('div',{'class':'timeline-graph'}))
@@ -87,7 +86,9 @@ Behavior('graph');
 
 
 
- (new TimelineQuery('get_timeline_graph', {})).addEvent('success',function(resp){
+ (new TimelineQuery('get_timeline_graph', {})).cache({
+     expire:5*3600
+ }).addEvent('success',function(resp){
      var data=resp.values;
 
 
@@ -198,7 +199,9 @@ Behavior('graph');
 				    plugin:'Attributes',
 				    table:'newsAttributes',
 				    field:'transitionType'
-	 			})).addEvent('success',function(resp){
+	 			})).cache({
+                                     expire:5*3600
+                                }).addEvent('success',function(resp){
 
 	 					console.log(resp);
 	 				    var options=resp.values;
@@ -243,7 +246,9 @@ Behavior('graph');
 
 		            							}))
 
-         	 			    	})).addEvent('success',function(resp){
+         	 			    	})).cache({
+                                     expire:5*3600
+                                }).addEvent('success',function(resp){
 
              	 			    	cacheData[cacheKey]=resp.values;
          	 			    		detailBar.setData(resp.values);
