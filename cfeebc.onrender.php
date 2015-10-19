@@ -65,7 +65,7 @@ filterManager.query(
                 },
                 popover:function(p){
                     setTimeout(function(){
-                        var marker=application.layerManager.filterMarkerById(match.id);
+                        var marker=application.getLayerManager().filterMarkerById(match.id);
                         if(marker){
                             p.setText(marker.getTitle());
                         }
