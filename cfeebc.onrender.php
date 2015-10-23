@@ -64,12 +64,12 @@ filterManager.query(
 
                 },
                 popover:function(p){
-                    setTimeout(function(){
+
                         var marker=application.getLayerManager().filterMarkerById(match.id);
                         if(marker){
                             p.setText(marker.getTitle());
                         }
-                    }, 2000);
+
                 	//going to search for items name, and then updated the display text.
 
                 }
@@ -119,13 +119,20 @@ filterManager.query(
                 pin.addEvent('click', event.onclick);
             }
             if(event.popover){
-                event.popover(new UIPopover(pin, {
-                    anchor:UIPopover.AnchorTo(['top']),
-                    title:'',
-                    description:event.label//,
-                    //hideDelay:500,
-                    //margin:50
-                }));
+                pin.addEvent('mouseover:once',function(){
+
+                	var popover=new UIPopover(pin, {
+                        anchor:UIPopover.AnchorTo(['top']),
+                        title:'',
+                        description:event.label//,
+                        //hideDelay:500,
+                        //margin:50
+                    });
+
+                event.popover(popover);
+                popover.show();
+
+                });
             }
             event.pin=pin;
         });
@@ -172,6 +179,8 @@ filterManager.query(
     }
 
 );
+
+
 
 
 </script>
