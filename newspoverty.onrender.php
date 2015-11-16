@@ -107,7 +107,7 @@ Behavior('graph');
      var detailBar=new UIGraph(graphBarDetail, data, {
                 lineTemplate:UIGraph.UnitStepBarsTemplate,
                  //lineTemplate:UIGraph.LineTemplate,
- 				title:"Number of outlet transitions from 2008",
+ 				title:"Number of changes since 2008",
  				height:77,
  				width:100,
                 widthUnit:'%',
@@ -207,13 +207,23 @@ Behavior('graph');
 	 				    var options=resp.values;
 
 
-
+                var countCbx=0;
+                span.appendChild(new Element('br'));
  			    Array.each(options,function(opt){
 
+                  if((typeof opt)!='string'||opt.length==0){
+                    return; //continue;
+                  }
+
+                  countCbx++;
  			      var checkbox=new Element('input',{type:'checkbox', checked:true, 'data-filter':opt});
- 			      var label=new Element('label', {'html':'<span>'+opt+'</span>', title:opt});
+ 			      var label=new Element('label', {title:opt});
  			      span.appendChild(label);
+                  if(countCbx%3==0){
+                    span.appendChild(new Element('br'));
+                  }
  			      label.appendChild(checkbox);
+                  label.appendChild(new Element('span',{html:opt}));
  			      checkboxes.push(checkbox);
  			      checkbox.addEvent('click', function(){
 
