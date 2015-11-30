@@ -118,15 +118,19 @@ Behavior('graph');
 	});
 
 	new UIGraph(graphBarDetail, data, {
-		lineTemplate:UIGraph.UnitStepTemplate,
-		//lineTemplate:UIGraph.LineTemplate,
 		title:"",
 		height:71,
 		width:900,
 		widthUnit:'%',
 		padding:0,
-		lineColor: 'black',
-		fillColor:'rgb(179, 209, 255)'
+		lineColor: 'rgba(0,0,0,0.5)',
+		lineTemplate:UIGraph.UnitStepBarsTemplate,
+    	fillGradient:true,
+		fillGradientArray: [
+        	'rgba(0, 0, 0, 0.4)',
+			'rgba(145, 128, 77,0.7)'
+		],
+    	highlightTemplate:UIGraph.UnitStepBarsHighlighter
 	});
 
 }).execute();
