@@ -50,7 +50,6 @@ var erraSpan=container.appendChild(new Element('span', {'class':'era-s'}));
 
  var events=[
  //{start:'1804', label:'under Austrian control'},
-
  ];
 
  Array.each(events, function(event){
@@ -69,7 +68,8 @@ var erraSpan=container.appendChild(new Element('span', {'class':'era-s'}));
 
      });
 
-     new UIPopover(pin, {anchor:UIPopover.AnchorTo(['top']),
+     new UIPopover(pin, {
+                anchor:UIPopover.AnchorTo(['top']),
                 title:'',
                 description:event.label//,
                 //hideDelay:500,
@@ -150,8 +150,8 @@ Behavior('graph');
      /*
       * add title and checkboxes to filter the graph
       */
+     detailBar.titleEl.addClass('dropdown-menu');
      detailBar.titleEl.appendChild((function(){
-
 
                 var span=new Element('span', {'class':'timeline-opts'});
 
