@@ -85,7 +85,6 @@ Behavior('graph');
 ?>
 
 
-
  (new TimelineQuery('get_timeline_graph', {showDates:true})).addEvent('success',function(resp){
      var data=resp.values;
 
@@ -115,6 +114,20 @@ Behavior('graph');
                 highlightTemplate:UIGraph.UnitStepBarsHighlighter
 
             });
+
+
+     if (resp.subscription) {
+          AjaxControlQuery.Subscribe(resp.subscription, function(result) {
+              (new TimelineQuery('get_timeline_graph', {showDates:true})).addEvent('success',function(resp){
+                data=resp.values;
+                hintBar.setData(data.map(function(d){return d.count;}));
+                detailBar.setData(data.map(function(d){return d.count;}));
+
+              }).execute();
+          });
+     }
+
+
      detailBar.addEvent('click',function(data){
 
          console.log(data);
