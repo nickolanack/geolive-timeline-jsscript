@@ -101,7 +101,7 @@ Behavior('graph');
                 fillGradient:true
             });
 
-     var detailBar=new UIGraph(graphBarDetail, data.map(function(d){return d.count;}), {
+     var detailBar=new UIGraph(graphBarDetail, data, {
                 lineTemplate:UIGraph.UnitStepBarsTemplate,
                  //lineTemplate:UIGraph.LineTemplate,
                 title:"Number of changes since 2008",
@@ -111,8 +111,13 @@ Behavior('graph');
                 padding:0,
                 lineColor: 'black',
                 fillGradient:true,
-                highlightTemplate:UIGraph.UnitStepBarsHighlighter
-
+                highlightTemplate:UIGraph.UnitStepBarsHighlighter,
+                parseMeta:function(v,i){
+                  return v;
+                },
+                parseY:function(v,i){
+                  return v.count;
+                }
             });
 
 
@@ -121,7 +126,7 @@ Behavior('graph');
               (new TimelineQuery('get_timeline_graph', {showDates:true})).addEvent('success',function(resp){
                 data=resp.values;
                 hintBar.setData(data.map(function(d){return d.count;}));
-                detailBar.setData(data.map(function(d){return d.count;}));
+                detailBar.setData(data);
 
               }).execute();
           });
@@ -131,7 +136,7 @@ Behavior('graph');
      detailBar.addEvent('click',function(data){
 
          console.log(data);
-         timeline.setValue([data.x, data.x+1]);
+         timeline.setDateRange(data.meta.start, data.meta.end);
      });
 
      //adding a custom popover that follows the cursor.
@@ -242,13 +247,13 @@ Behavior('graph');
                         var cacheKey=makeCacheKey();
                         if(allBoxesAreChecked()){
 
-                            detailBar.setData(data.map(function(d){return d.count;}));
+                            detailBar.setData(data);
                             hintBar.setData(data.map(function(d){return d.count;}));
 
                         }else if((typeof cacheData[cacheKey])!='undefined'){
 
                                 console.log('used cached data');
-                                detailBar.setData(cacheData[cacheKey].map(function(d){return d.count;}));
+                                detailBar.setData(cacheData[cacheKey]);
                                 hintBar.setData(cacheData[cacheKey].map(function(d){return d.count;}));
 
                         }else {
