@@ -29,7 +29,7 @@ Array.each(eras, function(era){
 	var e=eraRange[1]-eraRange[0];
 	var r=[dateToPercent(s), dateToPercent(e)]
 	bar.appendChild(new Element('div', {
-		'class':'era e-'+era.start,
+		'class':'era e-'+era.start+' '+era.label.replace(' ', '-').toLowerCase(),
 		'data-label':era.label,
 		styles:{
 			left:r[0]+'%',
@@ -125,15 +125,17 @@ Behavior('graph');
 		padding:0,
 		lineColor: 'rgba(0,0,0,0.5)',
 		lineTemplate:UIGraph.UnitStepBarsTemplate,
+                 //lineTemplate:UIGraph.LineTemplate,
+
+
     	fillGradient:true,
-		fillGradientArray: [
-        	'rgba(0, 0, 0, 0.4)',
-			'rgba(145, 128, 77,0.7)'
-		],
+fillGradientArray: [
+
+                'rgba(0, 0, 0, 0.4)',
+'rgba(145, 128, 77,0.7)'],
     	highlightTemplate:UIGraph.UnitStepBarsHighlighter
 	});
 
 }).execute();
-
 
 </script>
